@@ -1,1 +1,1 @@
-# koja_jabart
+# Korean/Japanese NMT using Japanese BART

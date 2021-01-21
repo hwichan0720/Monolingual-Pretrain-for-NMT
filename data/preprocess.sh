@@ -46,7 +46,7 @@ fairseq-preprocess \
     --trainpref train \
     --validpref dev \
     --testpref  test-n,test-n1,test-n2,test-n3 \
-    --joined-dictionary　\
+    --joined-dictionary \
     --destdir ko-ja
 
 echo "binalize ja-ko data"
@@ -83,4 +83,4 @@ fairseq-preprocess \
 
 echo "trim japanese bart"
 mkdir -p $TRIM_BART
-python $tools/trim_bart.py --pre-train-dir $JPBART --ft-dict bin/dict.ja.txt --output $TRIM_BART/ja_bart_base.pt
+python $tools/trim_bart.py --pre-train-dir $JPBART --ft-dict ko-ja/dict.ja.txt --output $TRIM_BART/ja_bart_base.pt

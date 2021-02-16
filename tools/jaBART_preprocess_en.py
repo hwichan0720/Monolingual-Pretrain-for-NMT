@@ -15,10 +15,9 @@ def main(model, sp_dict, input_file, output_file, l2, l1="ja"):
     s.set_vocabulary(vocabs)
 
     # tokenize japanese 
-    with open(f"{output_file}.tok.{l1}", "w") as l1_tok_f, open(f"{output_file}.{l1}", "w") as l1_sub_f,\
-         open(f"{output_file}.tok.{l2}", "w") as l2_f:
+    with open(f"{output_file}.tok.{l1}", "w", encoding='utf-8') as l1_tok_f, open(f"{output_file}.{l1}", "w", encoding='utf-8') as l1_sub_f,\
+         open(f"{output_file}.tok.{l2}", "w", encoding='utf-8') as l2_f:
         for n, (l1_line, l2_line) in enumerate(zip(open(f"{input_file}.{l1}"), open(f"{input_file}.{l2}"))):
-
             if (n+1) % 100000 == 0: 
                 print(f"done {n+1} lines")
             l1_line = l1_line.strip()

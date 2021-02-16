@@ -1,11 +1,17 @@
 *.pt
 *.ko
 *.ja
+*.en
+*.de
+enja
 ja-ko
 ko-ja
 ja-ja
 zeroshot-ja-ja
 JPC4.3/
 model
+checkpoints/
+*log*
 mbart.cc25.v2
 japanese_bart_base_1.1
+bart.base

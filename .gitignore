@@ -6,11 +6,10 @@
 *.koen
 enja_2
 koen-ja
-ja-ko
-ko-ja
-ja-ja
-enfr
-enja
+*.txt
+*.bin
+*.idx
+europarl
 kobart
 zeroshot-ja-ja
 JPC4.3/

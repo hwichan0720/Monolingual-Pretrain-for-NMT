@@ -1,7 +1,7 @@
 #!/usr/bin/env -eu
 GPU=$1
 ROOT=../../
-bin=$ROOT/data/enja/enBART/ja-en
+bin=$ROOT/data/enbart/enja/ja-en
 
 CUDA_VISIBLE_DEVICES=$GPU fairseq-train $bin \
     --seed 1 \

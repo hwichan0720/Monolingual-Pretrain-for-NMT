@@ -1,14 +1,15 @@
 #!/usr/bin/env -eu
 GPU=$1
 ROOT=../..
-ENBART=$ROOT/pretrained_bart/trim/enbart_enja/enbart_base.pt
-bin=$ROOT/data/enbart/enja/ja-en
+fairseq=/fairseq
+BIN=$ROOT/data/jabart/enja/en-ja
+PRETRAINED_MODEL=$ROOT/pretrained_bart/trim/jabart_jaen/jabart_base.pt
 
-CUDA_VISIBLE_DEVICES=$GPU fairseq-train $bin \
+CUDA_VISIBLE_DEVICES=$GPU fairseq-train $BIN \
     --arch bart_base \
-    --restore-file $ENBART \
-    --task translation \
-    --source-lang ja --target-lang en \
+    --restore-file $PRETRAINED_MODEL \
+    --task translation_from_pretrained_bart \
+    --source-lang en --target-lang ja \
     --seed 1 \
     --keep-last-epochs 10 \
     --optimizer adam \
@@ -32,6 +33,7 @@ CUDA_VISIBLE_DEVICES=$GPU fairseq-train $bin \
     --reset-dataloader \
     --reset-lr-scheduler \
     --eval-bleu \
+    --eval-bleu-remove-bpe sentencepiece \
     --best-checkpoint-metric bleu \
     --maximize-best-checkpoint-metric \
     --patience 10

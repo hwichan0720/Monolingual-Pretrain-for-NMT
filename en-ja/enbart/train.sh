@@ -1,15 +1,15 @@
 #!/usr/bin/env -eu
 GPU=$1
 ROOT=../..
-ENBART=$ROOT/pretrained_bart/trim/jaen_en_bart_base.pt
-bin=$ROOT/data/enja/enBART/en-ja
-fairseq=/fairseq
+ENBART=$ROOT/pretrained_bart/trim/enbart_enja/enbart_base.pt
+bin=$ROOT/data/enbart/enja/en-ja
 
 CUDA_VISIBLE_DEVICES=$GPU fairseq-train $bin \
     --arch bart_base \
     --restore-file $ENBART \
-    --task translation \
+    --task translation_from_pretrained_bart \
     --source-lang en --target-lang ja \
+    --langs en,ja \
     --seed 1 \
     --keep-last-epochs 10 \
     --optimizer adam \

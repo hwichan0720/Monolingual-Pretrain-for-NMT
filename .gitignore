@@ -31,3 +31,4 @@ trim_bart_*
 trim_bert*
 *.checkpoints
 *.fr
+__pycache__

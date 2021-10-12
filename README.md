@@ -14,7 +14,7 @@ BART realizes consistent improvements regardless of the language pairs and trans
 <img width='700' src='https://user-images.githubusercontent.com/49673825/136892120-a8ea0ba7-fe3b-4d9e-895f-ae90edca0ffc.png'>
 </div>
 
-When languages are syntactically similar, BART can yield approximately twice the accuracy of our baseline model in the initial epoch. (section 4.1)
+When pre-training and finetuning languages are syntactically similar, BART can yield approximately twice the accuracy of our baseline model in the initial epoch. (section 4.1)
 <div align="center">
 <img width='700' alt='スクリーンショット 2021-10-12 13 34 16' src='https://user-images.githubusercontent.com/49673825/136892130-a0390378-e111-4eb9-9bea-cb68119edf22.png'>
 </div>

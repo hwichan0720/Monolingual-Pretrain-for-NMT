@@ -13,51 +13,48 @@ MOSES=$tools/mosesdecoder
 MOSES_SCRIPT=$MOSES/scripts
 TRIM_BART=$PRETRAINED_DIR/trim
 
-
 MODEL=model
-src=en
-tgt=ja
 
 echo "preprocess japanese"
 for prefix in train dev; do 
-    python $tools/jaBART_preprocess_en.py -m $JABART/sp.model -i $TRAINDEV/$prefix -d $JABART/dict.txt  -o $prefix -l1 $tgt -l2 $src
+    python $tools/jaBART_preprocess_en.py -m $JABART/sp.model -i $TRAINDEV/$prefix -d $JABART/dict.txt  -o $prefix -l1 ja -l2 en
 done
 
 for prefix in n n1 n2 n3; do 
-    python $tools/jaBART_preprocess_en.py -m $JABART/sp.model -i $TEST/test-$prefix -d $JABART/dict.txt -o test-$prefix -l1 $tgt -l2 $src
+    python $tools/jaBART_preprocess_en.py -m $JABART/sp.model -i $TEST/test-$prefix -d $JABART/dict.txt -o test-$prefix -l1 ja -l2 en
 done
 
 echo "tokenize english"
 for prefix in train dev ; do
-  cat $prefix.tok.en | \
+  cat $prefix.tmp.en | \
   perl ${MOSES_SCRIPT}/tokenizer/normalize-punctuation.perl -l en | \
   perl ${MOSES_SCRIPT}/tokenizer/tokenizer.perl -l en -no-escape \
-  > $prefix.tok.2.en
+  > $prefix.tok.en
 done
 
 for prefix in n n1 n2 n3; do
-  cat test-$prefix.tok.en | \
+  cat test-$prefix.tmp.en | \
   perl ${MOSES_SCRIPT}/tokenizer/normalize-punctuation.perl -l en | \
   perl ${MOSES_SCRIPT}/tokenizer/tokenizer.perl -l en -no-escape \
-  > test-$prefix.tok.2.en
+  > test-$prefix.tok.en
 done
 
 echo "train SP model for english"
 mkdir -p $MODEL
-python $tools/apply_sp.py -m $MODEL/sp.$src -i train.tok.2.$src -v 32000 -f True
+python $tools/apply_sp.py -m $MODEL/sp.en -i train.tok.en -v 32000 -f True
 
 for prefix in train dev; do
-    python $tools/apply_sp.py -m $MODEL/sp.$src -i $prefix.tok.2.$src > $prefix.$src
+    python $tools/apply_sp.py -m $MODEL/sp.en -i $prefix.tok.en > $prefix.en
 done
 
 for prefix in n n1 n2 n3; do 
-    python $tools/apply_sp.py -m $MODEL/sp.$src -i test-$prefix.tok.2.$src > test-$prefix.$src
+    python $tools/apply_sp.py -m $MODEL/sp.en -i test-$prefix.tok.en > test-$prefix.en
 done
 
 echo "binalize en-ja data"
 fairseq-preprocess \
-    --source-lang $src \
-    --target-lang $tgt \
+    --source-lang en \
+    --target-lang ja \
     --trainpref train \
     --validpref dev \
     --testpref  test-n,test-n1,test-n2,test-n3 \
@@ -66,8 +63,8 @@ fairseq-preprocess \
 
 echo "binalize ja-en data"
 fairseq-preprocess \
-    --source-lang $tgt \
-    --target-lang $src \
+    --source-lang ja \
+    --target-lang en \
     --trainpref train \
     --validpref dev \
     --testpref  test-n,test-n1,test-n2,test-n3 \

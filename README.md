@@ -25,7 +25,7 @@ The representations of the encoder remain unchanged after fine-tuning when high 
  <img width='700' alt='スクリーンショット 2021-10-12 13 34 27' src='https://user-images.githubusercontent.com/49673825/136892137-64643a96-7fa0-4f0f-9dae-951b0fb2c3e8.png'>
 </div>
 
-## How to use
+# How to use
 
 Plese set the [JPC](http://lotus.kuee.kyoto-u.ac.jp/WAT/patent/) and [Europarl](https://www.statmt.org/europarl/) corpora to the data directory.
 

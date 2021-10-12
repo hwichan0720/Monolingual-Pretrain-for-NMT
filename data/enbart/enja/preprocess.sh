@@ -12,23 +12,21 @@ MOSES_SCRIPT=$MOSES/scripts
 TRIM_BART=$PRETRAINED_DIR/trim
 
 MODEL=model
-src=en
-tgt=ja
 
 echo "preprocess japanese"
 for prefix in train dev; do 
-    python $tools/jaBART_preprocess_en.py -m $JABART/sp.model -i $TRAINDEV/$prefix -d $JABART/dict.txt  -o $prefix -l1 $tgt -l2 $src
+    python $tools/jaBART_preprocess_en.py -m $JABART/sp.model -i $TRAINDEV/$prefix -d $JABART/dict.txt  -o $prefix -l1 ja -l2 en
 done
 
 for prefix in n n1 n2 n3; do 
-    python $tools/jaBART_preprocess_en.py -m $JABART/sp.model -i $TEST/test-$prefix -d $JABART/dict.txt -o test-$prefix -l1 $tgt -l2 $src
+    python $tools/jaBART_preprocess_en.py -m $JABART/sp.model -i $TEST/test-$prefix -d $JABART/dict.txt -o test-$prefix -l1 ja -l2 en
 done
 
 echo "preprocess english"
 python -m examples.roberta.multiprocessing_bpe_encoder \
     --encoder-json $ENBART/encoder.json \
     --vocab-bpe $ENBART/vocab.bpe \
-    --inputs $TRAINDEV/train.en  \
+    --inputs $TRAINDEV/train.tmp.en  \
     --outputs ./train.en \
     --workers 60 \
     --keep-empty
@@ -36,7 +34,7 @@ python -m examples.roberta.multiprocessing_bpe_encoder \
 python -m examples.roberta.multiprocessing_bpe_encoder \
     --encoder-json $ENBART/encoder.json \
     --vocab-bpe $ENBART/vocab.bpe \
-    --inputs $TRAINDEV/dev.en \
+    --inputs $TRAINDEV/dev.tmp.en \
     --outputs ./dev.en \
     --workers 60 \
     --keep-empty
@@ -45,7 +43,7 @@ for prefix in n n1 n2 n3; do
     python -m examples.roberta.multiprocessing_bpe_encoder \
         --encoder-json $ENBART/encoder.json \
         --vocab-bpe $ENBART/vocab.bpe \
-        --inputs $TRAINDEV/test-$prefix.en  \
+        --inputs $TRAINDEV/test-$prefix.tmp.en  \
         --outputs ./test-$prefix.en \
         --workers 60 \
         --keep-empty

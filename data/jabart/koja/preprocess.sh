@@ -10,7 +10,7 @@ tools=$ROOT/tools
 MODEL=model
 TRIM_BART=$PRETRAINED_DIR/trim
 
-echo "japanese preprocess"
+echo "Japanese preprocess"
 for prefix in train dev; do 
     python $tools/jaBART_preprocess.py -m $JPBART/sp.model -i $TRAINDEV/$prefix -d $JPBART/dict.txt  -o $prefix -l1 ja -l2 ko
 done
@@ -28,7 +28,7 @@ for prefix in n n1 n2 n3; do
     cat test-$prefix.tmp.ko | mecab -d $MECABKO -O wakati > test-$prefix.tok.ko
 done
 
-echo "train SP model for korean"
+echo "train SP model for Korean"
 mkdir -p $MODEL
 python $tools/apply_sp.py -m $MODEL/sp.ko -i train.tok.ko -v 32000 -f True
 

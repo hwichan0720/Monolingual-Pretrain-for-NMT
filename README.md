@@ -65,4 +65,4 @@ bash train.sh
 
 ### Calculate the CKA similarity (the experiment of section 4.2)
 
-We add the [example](https://github.com/hwichan0720/Monolingual-Pretrain-for-NMT/blob/main/notebooks/CKA.ipynb) in the notebook directory.
+We add [examples](https://github.com/hwichan0720/Monolingual-Pretrain-for-NMT/blob/main/notebooks/CKA.ipynb) in the notebook directory.

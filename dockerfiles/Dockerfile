@@ -5,6 +5,7 @@ ENV HOME=/home/app
 COPY . $HOME/myapp
 
 RUN apt-get update && apt-get install -y \
+    sudo \
     build-essential \
     curl \
     bzip2 \
@@ -18,19 +19,7 @@ RUN apt-get update && apt-get install -y \
     autoconf \
     unzip \
     automake \
-    zlib1g-dev 
-
-RUN pip install -U pip &&\
-    pip install zenhan &&\
-    pip install sentencepiece 
-
-# install fastalign
-RUN git clone https://github.com/clab/fast_align.git &&\
-    cd fast_align &&\
-    mkdir build &&\
-    cd build &&\
-    cmake .. &&\
-    make 
+    zlib1g-dev
 
 # install juman++
 RUN mkdir $HOME/src && \
@@ -43,13 +32,6 @@ RUN mkdir $HOME/src && \
     cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local/ && \
     make && \
     make install
-
-# install kytea
-RUN wget http://www.phontron.com/kytea/download/kytea-0.4.7.tar.gz &&\
-    tar zxvf kytea-0.4.7.tar.gz && cd kytea-0.4.7 && \
-    wget https://patch-diff.githubusercontent.com/raw/neubig/kytea/pull/24.patch && \
-    git apply ./24.patch && ./configure && \
-    make && make install && ldconfig -v
 
 # install mecab
 RUN apt-get install -y mecab libmecab-dev mecab-ipadic mecab-ipadic-utf8
@@ -73,26 +55,35 @@ RUN git clone https://github.com/google/sentencepiece.git &&\
     make install &&\
     ldconfig -v
 
-# install fasttext
-RUN wget https://github.com/facebookresearch/fastText/archive/v0.9.2.zip &&\
-    unzip v0.9.2.zip &&\
-    cd fastText-0.9.2 &&\
-    make
-
-# clone MUSE
-RUN git clone https://github.com/facebookresearch/MUSE.git
-
 RUN rm -rf $HOME/src && \
     apt-get purge -y \
     build-essential \
     curl \
     bzip2
 
-RUN pip install pyknp &&\
+# install japanese_bart_pretrained_model branch of fairseq implementation 
+RUN pip install -U pip &&\
+    pip install pyknp &&\
     git clone -b japanese_bart_pretrained_model https://github.com/utanaka2000/fairseq.git &&\
     cd fairseq &&\
-    pip install --editable .\
-    pip install scipy
+    pip install --editable .
+
+
+RUN pip install zenhan &&\
+    pip install sentencepiece &&\
+    pip install pandas &&\
+    pip install scipy &&\
+    pip install -U numpy &&\
+    pip install seaborn &&\
+    pip install jupyterlab
+
+RUN jupyter serverextension enable --py jupyterlab 
+
+ARG UID
+RUN useradd newuser -u $UID -m  
+RUN echo 'newuser:password' | chpasswd
+RUN usermod -aG sudo newuser
+USER newuser
 
 WORKDIR /home
 

@@ -39,7 +39,6 @@ docker build -t image_name t .
 ### Run docker container
 
 ```
-cd koja_jabart
 docker run -v `pwd`:/home --gpus all -it image_name
 ```
 
